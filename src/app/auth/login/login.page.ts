@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '@ac/core/services';
+import { Router } from '@angular/router';
 
 interface LoginFormData {
     username: string;
@@ -15,7 +16,11 @@ interface LoginFormData {
 export class LoginPage implements OnInit {
     public loginForm: FormGroup;
 
-    constructor(private fb: FormBuilder, private _authService: AuthService) {}
+    constructor(
+        private fb: FormBuilder,
+        private authService: AuthService,
+        private router: Router
+    ) {}
 
     ngOnInit(): void {
         this.loginForm = this.fb.group({
@@ -34,10 +39,10 @@ export class LoginPage implements OnInit {
         if (!valid) {
             return;
         }
-        this._authService
+        this.authService
             .login(value.username, value.password)
             .subscribe(success => {
-                console.log(success);
+                this.router.navigateByUrl('/home');
             });
     }
 }

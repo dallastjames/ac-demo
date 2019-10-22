@@ -4,7 +4,7 @@
 
 export const environment = {
     production: false,
-    dataService: 'https://cs-demo-api.herokuapp.com'
+    dataService: 'https://us-central1-easyserver-bf0d9.cloudfunctions.net/api'
 };
 
 /*
