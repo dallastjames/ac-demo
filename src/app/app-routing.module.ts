@@ -10,7 +10,18 @@ const routes: Routes = [
             import('./home/home.module').then(m => m.HomePageModule),
         canActivate: [LoggedInGuard]
     },
-    { path: 'login', loadChildren: './auth/login/login.module#LoginPageModule' }
+    {
+        path: 'login',
+        loadChildren: (): any =>
+            import('./auth/login/login.module').then(m => m.LoginPageModule)
+    },
+    {
+        path: 'callback',
+        loadChildren: (): any =>
+            import('./auth/callback/callback.module').then(
+                m => m.CallbackPageModule
+            )
+    }
 ];
 
 @NgModule({

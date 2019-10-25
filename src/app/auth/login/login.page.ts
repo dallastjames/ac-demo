@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '@ac/core/services';
+import { AuthService, AuthConnectService } from '@ac/core/services';
 import { Router } from '@angular/router';
 
 interface LoginFormData {
@@ -19,6 +19,7 @@ export class LoginPage implements OnInit {
     constructor(
         private fb: FormBuilder,
         private authService: AuthService,
+        private authConnectService: AuthConnectService,
         private router: Router
     ) {}
 
@@ -44,5 +45,9 @@ export class LoginPage implements OnInit {
             .subscribe(success => {
                 this.router.navigateByUrl('/home');
             });
+    }
+
+    public trySSO(): void {
+        this.authConnectService.login();
     }
 }
