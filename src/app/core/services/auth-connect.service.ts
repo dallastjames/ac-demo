@@ -7,6 +7,7 @@ import { IonicAuth, IonicAuthOptions } from '@ionic-enterprise/auth';
 export class AuthConnectService extends IonicAuth {
     constructor() {
         const auth0Config: IonicAuthOptions = {
+            // tokenStorageProvider: 'localStorage',
             authConfig: 'auth0',
             platform: 'capacitor',
             clientID: 'N9t6vp7jI38GqIBbq72emgbuqLnF2JL5',
