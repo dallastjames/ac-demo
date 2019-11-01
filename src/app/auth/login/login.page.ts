@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService, AuthConnectService } from '@ac/core/services';
+import { AuthService, Auth0Service, IdentityService } from '@ac/core/services';
 import { Router } from '@angular/router';
 
 interface LoginFormData {
@@ -19,15 +19,30 @@ export class LoginPage implements OnInit {
     constructor(
         private fb: FormBuilder,
         private authService: AuthService,
-        private authConnectService: AuthConnectService,
+        private auth0Service: Auth0Service,
+        private identityService: IdentityService,
         private router: Router
     ) {}
 
-    ngOnInit(): void {
+    async ngOnInit(): Promise<void> {
         this.loginForm = this.fb.group({
             username: ['', [Validators.required, Validators.email]],
             password: ['', [Validators.required]]
         });
+        await this.auth0Service.isAuthenticated();
+        if (window.location.hash) {
+            // Pass it to Auth Connect
+            const res = await this.auth0Service.handleCallback(
+                window.location.href
+            );
+            const token = await this.auth0Service.getIdToken();
+            this.identityService.set(
+                {
+                    username: token.nickname
+                },
+                await this.auth0Service.getAccessToken()
+            );
+        }
     }
 
     public tryLogin({
@@ -47,7 +62,7 @@ export class LoginPage implements OnInit {
             });
     }
 
-    public trySSO(): void {
-        this.authConnectService.login();
+    public async tryAuth0(): Promise<void> {
+        await this.auth0Service.login();
     }
 }
