@@ -14,13 +14,6 @@ const routes: Routes = [
         path: 'login',
         loadChildren: (): any =>
             import('./auth/login/login.module').then(m => m.LoginPageModule)
-    },
-    {
-        path: 'callback',
-        loadChildren: (): any =>
-            import('./auth/callback/callback.module').then(
-                m => m.CallbackPageModule
-            )
     }
 ];
 

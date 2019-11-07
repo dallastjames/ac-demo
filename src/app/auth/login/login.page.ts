@@ -42,6 +42,7 @@ export class LoginPage implements OnInit {
                 },
                 await this.auth0Service.getAccessToken()
             );
+            this.router.navigateByUrl('/home');
         }
     }
 
