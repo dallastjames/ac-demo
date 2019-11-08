@@ -13,6 +13,7 @@ export class LoggedInGuard implements CanActivate {
 
     public canActivate(): Observable<boolean> {
         return this.identityService.get().pipe(
+            tap(u => console.log('login guard u', u)),
             map(u => !!u),
             tap(loggedIn => {
                 if (!loggedIn) {

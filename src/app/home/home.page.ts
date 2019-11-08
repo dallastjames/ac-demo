@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IdentityService } from '@ac/core/services';
+import { IdentityService, Auth0Service } from '@ac/core/services';
 import { User } from '@ac/core/models';
 import { Router } from '@angular/router';
 
@@ -14,11 +14,12 @@ export class HomePage {
 
     constructor(
         private identityService: IdentityService,
+        private auth0Service: Auth0Service,
         private router: Router
     ) {}
 
-    public async logout(): Promise<void> {
-        await this.identityService.remove();
-        this.router.navigateByUrl('/login');
+    async logout(): Promise<void> {
+        this.identityService.remove();
+        await this.auth0Service.logout();
     }
 }
