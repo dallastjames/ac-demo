@@ -15,6 +15,7 @@ interface LoginFormData {
 })
 export class LoginPage implements OnInit {
     public loginForm: FormGroup;
+    public authenticated: string = 'no-auth';
 
     constructor(
         private fb: FormBuilder,
@@ -29,24 +30,13 @@ export class LoginPage implements OnInit {
             username: ['', [Validators.required, Validators.email]],
             password: ['', [Validators.required]]
         });
-        console.log('hash', window.location.hash);
-        if (window.location.hash) {
-            console.log('href', window.location.href);
-            const res = await this.auth0Service.handleCallback(
-                window.location.href
-            );
-            console.log('res', res);
-            const token = await this.auth0Service.getIdToken();
-            console.log('token', token);
-            this.identityService.set(
-                {
-                    username: token.nickname
-                },
-                await this.auth0Service.getAccessToken()
-            );
-            console.log('before navigate');
-            this.router.navigateByUrl('/home');
-        }
+    }
+
+    async ionViewWillEnter(): Promise<void> {
+        await this.checkStatus();
+        // if (this.authenticated === 'has-auth') {
+        //     this.router.navigateByUrl('/home');
+        // }
     }
 
     public tryLogin({
@@ -68,5 +58,29 @@ export class LoginPage implements OnInit {
 
     public async tryAuth0(): Promise<void> {
         await this.auth0Service.login();
+        this.checkStatus();
+        if (this.authenticated) {
+            const token = await this.auth0Service.getIdToken();
+            this.identityService.set(
+                {
+                    username: token.nickname
+                },
+                await this.auth0Service.getAccessToken()
+            );
+            this.router.navigateByUrl('/home');
+        } else {
+            this.authenticated = 'auth-error';
+        }
+    }
+
+    public async logout(): Promise<void> {
+        await this.auth0Service.logout();
+        this.checkStatus();
+    }
+
+    public async checkStatus(): Promise<void> {
+        this.authenticated = (await this.auth0Service.isAuthenticated())
+            ? 'has-auth'
+            : 'no-auth';
     }
 }

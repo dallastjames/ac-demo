@@ -8,18 +8,18 @@ import { Platform } from '@ionic/angular';
 export class Auth0Service extends IonicAuth {
     constructor(platform: Platform) {
         const host = platform.is('capacitor')
-            ? 'com.dallastjames.acdemo://'
+            ? 'comdallastjamesacdemo://'
             : 'http://localhost:8100/';
         const targetPlatform = platform.is('capacitor') ? 'capacitor' : 'web';
         const config: IonicAuthOptions = {
             authConfig: 'auth0',
             platform: targetPlatform,
-            clientID: 'VQU81DmKm1WxhA6iehCrltCzErXo3YYo',
-            discoveryUrl: `https://acdemo.auth0.com/.well-known/openid-configuration`,
+            clientID: 'kG7kR8XChvRLANnuQO8h9hjHurKgW7au',
+            discoveryUrl: `https://dev-j3wl8n0b.auth0.com/.well-known/openid-configuration`,
             redirectUri: `${host}login`,
             scope: 'openid offline_access email picture profile',
             logoutUrl: `${host}logout`,
-            iosWebView: 'private'
+            iosWebView: 'shared'
         };
         super(config);
     }

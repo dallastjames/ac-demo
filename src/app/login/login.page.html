@@ -5,7 +5,10 @@
                 <ion-card-title>Auth Connect Demo</ion-card-title>
             </ion-card-header>
             <ion-card-content>
-                <ion-button (click)="tryAuth0()">Login with Auto0</ion-button>
+                Auth Status: {{ authenticated }}
+                <ion-button (click)="tryAuth0()">Login with Auth0</ion-button>
+                <ion-button (click)="logout()">Logout</ion-button>
+                <ion-button (click)="checkStatus()">Refresh Status</ion-button>
             </ion-card-content>
         </ion-card>
     </div>
