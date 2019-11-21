@@ -29,21 +29,6 @@ export class LoginPage implements OnInit {
             username: ['', [Validators.required, Validators.email]],
             password: ['', [Validators.required]]
         });
-        await this.auth0Service.isAuthenticated();
-        if (window.location.hash) {
-            // Pass it to Auth Connect
-            const res = await this.auth0Service.handleCallback(
-                window.location.href
-            );
-            const token = await this.auth0Service.getIdToken();
-            this.identityService.set(
-                {
-                    username: token.nickname
-                },
-                await this.auth0Service.getAccessToken()
-            );
-            this.router.navigateByUrl('/home');
-        }
     }
 
     public tryLogin({
@@ -65,5 +50,15 @@ export class LoginPage implements OnInit {
 
     public async tryAuth0(): Promise<void> {
         await this.auth0Service.login();
+        if (await this.auth0Service.isAuthenticated()) {
+            const token = await this.auth0Service.getIdToken();
+            this.identityService.set(
+                {
+                    username: token.nickname
+                },
+                await this.auth0Service.getAccessToken()
+            );
+            this.router.navigateByUrl('/home');
+        }
     }
 }

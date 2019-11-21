@@ -21,5 +21,6 @@ export class HomePage {
     public async logout(): Promise<void> {
         await this.identityService.remove();
         this.auth0Service.logout();
+        this.router.navigateByUrl('/login');
     }
 }
