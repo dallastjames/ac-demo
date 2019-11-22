@@ -5,6 +5,7 @@
                 <ion-card-title>Auth Connect Demo</ion-card-title>
             </ion-card-header>
             <ion-card-content>
+                Authenticated: {{ authenticated }}
                 <form
                     class="login-form"
                     [formGroup]="loginForm"
@@ -31,10 +32,20 @@
                             type="submit"
                             >Login</ion-button
                         >
+                        <ion-button
+                            color="secondary"
+                            (click)="tryAuth0()"
+                            *ngIf="!authenticated"
+                        >
+                            Login with Auth0
+                        </ion-button>
+                        <ion-button
+                            color="tertiary"
+                            (click)="logout()"
+                            *ngIf="authenticated"
+                            >Logout</ion-button
+                        >
                     </div>
-                    <ion-button color="secondary" (click)="tryAuth0()">
-                        Login with Auth0
-                    </ion-button>
                 </form>
             </ion-card-content>
         </ion-card>

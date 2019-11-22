@@ -15,6 +15,7 @@ interface LoginFormData {
 })
 export class LoginPage implements OnInit {
     public loginForm: FormGroup;
+    public authenticated: boolean = false;
 
     constructor(
         private fb: FormBuilder,
@@ -29,6 +30,7 @@ export class LoginPage implements OnInit {
             username: ['', [Validators.required, Validators.email]],
             password: ['', [Validators.required]]
         });
+        this.authenticated = await this.auth0Service.isAuthenticated();
     }
 
     public tryLogin({
@@ -50,15 +52,21 @@ export class LoginPage implements OnInit {
 
     public async tryAuth0(): Promise<void> {
         await this.auth0Service.login();
-        if (await this.auth0Service.isAuthenticated()) {
-            const token = await this.auth0Service.getIdToken();
-            this.identityService.set(
-                {
-                    username: token.nickname
-                },
-                await this.auth0Service.getAccessToken()
-            );
-            this.router.navigateByUrl('/home');
-        }
+        // if (await this.auth0Service.isAuthenticated()) {
+        //     const token = await this.auth0Service.getIdToken();
+        //     this.identityService.set(
+        //         {
+        //             username: token.nickname
+        //         },
+        //         await this.auth0Service.getAccessToken()
+        //     );
+        //     this.router.navigateByUrl('/home');
+        // }
+        this.authenticated = await this.auth0Service.isAuthenticated();
+    }
+
+    public async logout(): Promise<void> {
+        await this.auth0Service.logout();
+        this.authenticated = await this.auth0Service.isAuthenticated();
     }
 }
