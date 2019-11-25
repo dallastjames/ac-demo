@@ -18,6 +18,7 @@ export class AzureService extends IonicAuth {
             discoveryUrl:
                 'https://dtjacdemo.b2clogin.com/dtjacdemo.onmicrosoft.com/v2.0/.well-known/openid-configuration?p=B2C_1_acdemo2',
             redirectUri: `${host}login`,
+            // SCOPES INFO: https://docs.microsoft.com/en-us/azure/active-directory-b2c/active-directory-b2c-tutorials-spa-webapi?tabs=applications#configure-scopes
             scope:
                 'https://dtjacdemo.onmicrosoft.com/acdemo/demo.read openid offline_access email',
             audience: '',
