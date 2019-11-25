@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService, Auth0Service, IdentityService } from '@ac/core/services';
+import {
+    AuthService,
+    Auth0Service,
+    IdentityService,
+    AzureService
+} from '@ac/core/services';
 import { Router } from '@angular/router';
 
 interface LoginFormData {
@@ -20,6 +25,7 @@ export class LoginPage implements OnInit {
         private fb: FormBuilder,
         private authService: AuthService,
         private auth0Service: Auth0Service,
+        private azureService: AzureService,
         private identityService: IdentityService,
         private router: Router
     ) {}
@@ -57,6 +63,21 @@ export class LoginPage implements OnInit {
                     username: token.nickname
                 },
                 await this.auth0Service.getAccessToken()
+            );
+            this.router.navigateByUrl('/home');
+        }
+    }
+
+    public async tryAzure(): Promise<void> {
+        await this.azureService.login();
+        if (await this.azureService.isAuthenticated()) {
+            const token = await this.azureService.getIdToken();
+            console.log(token);
+            this.identityService.set(
+                {
+                    username: token.name
+                },
+                await this.azureService.getAccessToken()
             );
             this.router.navigateByUrl('/home');
         }
